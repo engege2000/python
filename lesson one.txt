@@ -1,0 +1,32 @@
+# 导入pandas库
+import pandas as pd
+# 读取Q文件，将第一行作为列名
+df = pd.read_excel("Systems Net Demand 13wks-MS2407B0 Q3'24&Q4'24-20240112-Prelim.xlsx", header=0)#nrows = 1000
+# 删除第2行到第5行，即索引为0到3的行
+df = df.drop(index=[0, 1, 2, 3])
+# 删除第一列
+df = df.drop(df.columns[0],axis=1)
+# 将第一行替换为列名，即将索引为4的行的值赋给columns属性
+df.columns = df.loc[4]
+# 删除第2行和第3行，即索引为4和5的行
+df = df.drop(index=[4, 5,6])
+# 将索引重置为从0开始的整数
+df = df.reset_index(drop=True)
+cols=['FAMILY']+[i for i in range(27,53)]
+df=df.loc[:,cols]
+# 将数据框转换为CSV文件，并保存到当前目录下，文件名为"Q.csv"
+df.to_csv("SND13.csv", index=False)
+# 读取Q文件，将第一行作为列名
+df = pd.read_csv('SND13.csv',header=None)
+# 删除第一列，即索引为0的列
+df = df.drop(df.columns[0], axis=1)
+# 将第一行作为列名，即将索引为0的行的值赋给columns属性
+df.columns = df.loc[0]
+# 删除第一行，即索引为0的行
+df = df.drop(index=0)
+# 将索引重置为从0开始的整数
+df = df.reset_index(drop=True)
+#修改列名
+df=df.rename(columns={'FAMILY':'PN'})
+# 将数据框转换为CSV文件，并保存到当前目录下，文件名为"F_new.csv"
+df.to_csv("SND13.csv", index=False)
